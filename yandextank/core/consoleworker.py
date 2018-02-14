@@ -1,4 +1,5 @@
 """ Provides classes to run TankCore from console environment """
+import requests
 from ConfigParser import ConfigParser, MissingSectionHeaderError, NoOptionError, NoSectionError
 import datetime
 import fnmatch
@@ -263,6 +264,7 @@ class ConsoleTank:
     IGNORE_LOCKS = "ignore_locks"
 
     def __init__(self, options, ammofile):
+        self.download_file_if_present()
         overwrite_options = {'core': {'lock_dir': options.lock_dir}} if options.lock_dir else {}
         self.options = options
         # self.lock_dir = options.lock_dir if options.lock_dir else '/var/lock'
@@ -296,6 +298,26 @@ class ConsoleTank:
     def set_baseconfigs_dir(self, directory):
         """        Set directory where to read configs set        """
         self.baseconfigs_location = directory
+
+    def download_file(self, url):
+        r = requests.get(url)
+        with open("/var/loadtest/load.yaml", "wb") as code:
+            code.write(r.content)
+
+    def download_file_if_present(self):
+        file = os.getenv('configName', "")
+
+        if file.__len__() > 0:
+            if file.__contains__("http"):
+                print("donwloading file {}".format(file))
+            else:
+                file = "https://github.com/LykkeCity/Lykke.Automation.Tests/tree/YandexTankTests/LoadTests/" + file
+                print("donwloading file {}".format(file))
+
+            self.download_file(file)
+        else:
+            print("configName is empty")
+
 
     def init_logging(self):
         """ Set up logging, as it is very important for console tool """
@@ -453,7 +475,7 @@ class ConsoleTank:
 
         self.log.info("Done performing test with code %s", retcode)
         raw_input("Press Enter key to close test")
-        
+
         return retcode
 
 
