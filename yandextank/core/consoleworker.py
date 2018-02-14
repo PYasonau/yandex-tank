@@ -264,7 +264,6 @@ class ConsoleTank:
     IGNORE_LOCKS = "ignore_locks"
 
     def __init__(self, options, ammofile):
-        self.download_file_if_present()
         overwrite_options = {'core': {'lock_dir': options.lock_dir}} if options.lock_dir else {}
         self.options = options
         # self.lock_dir = options.lock_dir if options.lock_dir else '/var/lock'
@@ -311,7 +310,7 @@ class ConsoleTank:
             if file.__contains__("http"):
                 print("donwloading file {}".format(file))
             else:
-                file = "https://github.com/LykkeCity/Lykke.Automation.Tests/tree/YandexTankTests/LoadTests/" + file
+                file = "https://raw.githubusercontent.com/LykkeCity/Lykke.Automation.Tests/YandexTankTests/LoadTests/" + file
                 print("donwloading file {}".format(file))
 
             self.download_file(file)
@@ -374,6 +373,7 @@ class ConsoleTank:
     def configure(self):
         while True:
             try:
+                self.download_file_if_present()
                 self.core.get_lock(self.options.ignore_lock)
                 break
             except LockError:
