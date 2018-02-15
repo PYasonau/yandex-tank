@@ -379,7 +379,7 @@ class ConsoleTank:
     def configure(self):
         while True:
             try:
-                self.download_file_if_present()
+                download_file_if_present()
                 self.core.get_lock(self.options.ignore_lock)
                 break
             except LockError:
