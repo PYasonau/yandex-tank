@@ -259,12 +259,13 @@ def load_tank_core(config_files, cmd_options, no_rc, depr_options, *other_opts):
                     cfg_depr=get_depr_cfg(config_files, no_rc, cmd_options, depr_options))
 
 
-def download_file(self, url):
+def download_file(url):
     r = requests.get(url)
     with open("/var/loadtest/load.yaml", "wb") as code:
         code.write(r.content)
 
-def download_file_if_present(self):
+
+def download_file_if_present():
     log = logging.getLogger(__name__)
     file = os.getenv('configName', "")
 
@@ -277,7 +278,7 @@ def download_file_if_present(self):
             print("donwloading file {}".format(file))
             log.info("donwloading file {}".format(file))
 
-        self.download_file(file)
+        download_file(file)
     else:
         print("configName is empty")
         log.info("configName is empty")
