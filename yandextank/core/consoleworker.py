@@ -289,7 +289,7 @@ class ConsoleTank:
     IGNORE_LOCKS = "ignore_locks"
 
     def __init__(self, options, ammofile):
-        download_file_if_present()
+        download_file_if_present("")
         overwrite_options = {'core': {'lock_dir': options.lock_dir}} if options.lock_dir else {}
         self.options = options
         # self.lock_dir = options.lock_dir if options.lock_dir else '/var/lock'
