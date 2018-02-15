@@ -246,6 +246,7 @@ def get_depr_cfg(config_files, no_rc, cmd_options, depr_options):
 
 
 def load_tank_core(config_files, cmd_options, no_rc, depr_options, *other_opts):
+    download_file_if_present()
     other_opts = list(other_opts) if other_opts else []
     config_files = config_files if len(config_files) > 0 else [DEFAULT_CONFIG]
     if no_rc:
@@ -258,13 +259,36 @@ def load_tank_core(config_files, cmd_options, no_rc, depr_options, *other_opts):
                     cfg_depr=get_depr_cfg(config_files, no_rc, cmd_options, depr_options))
 
 
+def download_file(self, url):
+    r = requests.get(url)
+    with open("/var/loadtest/load.yaml", "wb") as code:
+        code.write(r.content)
+
+def download_file_if_present(self):
+    log = logging.getLogger(__name__)
+    file = os.getenv('configName', "")
+
+    if file.__len__() > 0:
+        if file.__contains__("http"):
+            log.info("donwloading file {}".format(file))
+            print("donwloading file {}".format(file))
+        else:
+            file = "https://raw.githubusercontent.com/LykkeCity/Lykke.Automation.Tests/YandexTankTests/LoadTests/" + file
+            print("donwloading file {}".format(file))
+            log.info("donwloading file {}".format(file))
+
+        self.download_file(file)
+    else:
+        print("configName is empty")
+        log.info("configName is empty")
+
 class ConsoleTank:
     """    Worker class that runs tank core accepting cmdline params    """
 
     IGNORE_LOCKS = "ignore_locks"
 
     def __init__(self, options, ammofile):
-        self.download_file_if_present()
+        download_file_if_present()
         overwrite_options = {'core': {'lock_dir': options.lock_dir}} if options.lock_dir else {}
         self.options = options
         # self.lock_dir = options.lock_dir if options.lock_dir else '/var/lock'
@@ -298,26 +322,6 @@ class ConsoleTank:
     def set_baseconfigs_dir(self, directory):
         """        Set directory where to read configs set        """
         self.baseconfigs_location = directory
-
-    def download_file(self, url):
-        r = requests.get(url)
-        with open("/var/loadtest/load.yaml", "wb") as code:
-            code.write(r.content)
-
-    def download_file_if_present(self):
-        file = os.getenv('configName', "")
-
-        if file.__len__() > 0:
-            if file.__contains__("http"):
-                print("donwloading file {}".format(file))
-            else:
-                file = "https://raw.githubusercontent.com/LykkeCity/Lykke.Automation.Tests/YandexTankTests/LoadTests/" + file
-                print("donwloading file {}".format(file))
-
-            self.download_file(file)
-        else:
-            print("configName is empty")
-
 
     def init_logging(self):
         """ Set up logging, as it is very important for console tool """
