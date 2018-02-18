@@ -17,7 +17,7 @@ def get_terminal_size():
     '''
     Gets width and height of terminal viewport
     '''
-    default_size = (30, 130)
+    default_size = (35, 135)
     env = os.environ
 
     def ioctl_gwinsz(file_d):
@@ -390,7 +390,7 @@ class Screen(object):
             (float(self.info_panel_percent) / 100)) - 1
         if self.right_panel_width > 0:
             self.left_panel_width = self.term_width - \
-                self.right_panel_width - len(self.RIGHT_PANEL_SEPARATOR) + 3
+                self.right_panel_width - len(self.RIGHT_PANEL_SEPARATOR) + 7
         else:
             self.right_panel_width = 0
             self.left_panel_width = self.term_width - 1
