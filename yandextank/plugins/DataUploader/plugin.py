@@ -659,7 +659,7 @@ class JobInfoWidget(AbstractInfoWidget):
     def render(self, screen):
         template = "Author: " + screen.markup.RED + "%s" + \
                    screen.markup.RESET + \
-                   "%s\n   Job: %s %s\n  Task: %s %s\n   Web: %s%s"
+                   "%s\n   Job: %s %s\n  Task: %s %s\n   Web: %s/%s"
         data = (self.owner.lp_job.person[:1], self.owner.lp_job.person[1:],
                 self.owner.lp_job.number, self.owner.lp_job.name, self.owner.lp_job.task,
                 # todo: task_name from api_client.get_task_data()
