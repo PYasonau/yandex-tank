@@ -481,7 +481,6 @@ class ConsoleTank:
             self.core.close()
 
         self.log.info("Done performing test with code %s", retcode)
-        raw_input("Press Enter key to close test")
 
         return retcode
 
